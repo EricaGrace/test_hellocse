@@ -4,23 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Administrateur;
+use App\Http\Requests\StoreAdminRequest;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
 
 class AdministrateurController extends Controller
 {
-    public function index(){
-        $admin = Administrateur::All();
+    public function index() // fonction servant à récupérer la liste des admins sans conditions
+    {
+        $admin = Administrateur::all();
         return response()->json($admin);
     }
 
-    public function inscription(Request $request)
+    public function inscription(StoreAdminRequest $request) # fonction servant à inscrire un nouvel admin , présence d'une formrequest
     {
-        $request->validate([
-            'nom' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:administrateurs,email'],
-            'mot_de_passe' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
 
         $admin = Administrateur::create([
             'nom' => $request->nom,
@@ -28,28 +24,31 @@ class AdministrateurController extends Controller
             'mot_de_passe' => Hash::make($request->mot_de_passe),
         ]);
 
+       // dd($admin);
+
         $token = $admin->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
+            'message'   => 'Utilisateur créé !'
         ]);
     }
 
-    public function connexion(Request $request)
+    public function connexion(Request $request) // fonction servant à la connexion des admins 
     {
-        $request->validate([
+        $request->validate([  // vérification/ validation des données requises 
             'email' => ['required', 'string', 'email', 'max:255'],
             'mot_de_passe' => ['required', 'string'],
         ]);
 
-        $admin = Administrateur::where('email', $request->email)->first();
+        $admin = Administrateur::where('email', $request->email)->first(); // recherche de l'admin dont l'email rentré correspond
 
-        if (!$admin || !Hash::check($request->mot_de_passe, $admin->mot_de_passe)) {
+        if (!$admin || !Hash::check($request->mot_de_passe, $admin->mot_de_passe)) { // si le mot de passe ne correspond pas, envoyer un message d'erreur
             return response()->json(['message' => 'Identifiant ou mot de passe invalide'], 401);
         }
 
-        $token = $admin->createToken('auth_token')->plainTextToken;
+        $token = $admin->createToken('auth_token')->plainTextToken; // création d'un token d'accès
 
         return response()->json([
             'access_token' => $token,
@@ -57,9 +56,9 @@ class AdministrateurController extends Controller
         ]);
     }
 
-    public function deconnexion(Request $request)
+    public function deconnexion(Request $request) // deconnexion de l'admin
     {
-        $request->user()->currentAccessToken()->delete();
+        $request->user()->currentAccessToken()->delete(); //suppression du token créé à la connexion 
 
         return response()->json(['message' => 'Déconnecté']);
     }

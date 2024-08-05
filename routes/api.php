@@ -20,15 +20,15 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 }); */
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::post('register', [AdministrateurController::class, 'inscription']);
+Route::post('login', [AdministrateurController::class, 'connexion']);
+
+Route::middleware('auth:sanctum')->group(function () { ##routes protégées par authentification à l'aide de sanctum
+    Route::post('logout', [AdministrateurController::class, 'deconnexion']);
     Route::post('/profiles', [ProfileController::class, 'create_profile']);
     Route::put('/profiles/{id}', [ProfileController::class, 'update_profile']);
     Route::delete('/profiles/{id}', [ProfileController::class, 'delete_profile']);
-    Route::post('logout', [AuthController::class, 'deconnexion']);
 });
 
 Route::get('/profiles', [ProfileController::class, 'index']);
 Route::get('/admins', [AdministrateurController::class, 'index']);
-
-Route::post('register', [AdministrateurController::class, 'inscription']);
-Route::post('login', [AdministrateurController::class, 'connexion']);

@@ -3,15 +3,16 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules;
 
-class StoreProfileRequest extends FormRequest
+class StoreAdminRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return true; 
     }
 
     /**
@@ -23,9 +24,8 @@ class StoreProfileRequest extends FormRequest
     {
         return [
             'nom' => 'required|string|max:255',
-            'prenom' => 'required|string|max:255',
-            'image' => 'required|file|mimes:jpeg,png,jpg,gif|max:2048',
-            'statut' => 'required|in:inactif,en attente,actif',
+            'email' => 'required|string|email|max:255|unique:administrateurs,email',
+            'mot_de_passe' => ['required', 'confirmed', Rules\Password::defaults()],
         ];
     }
 }
