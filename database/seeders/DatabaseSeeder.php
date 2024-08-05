@@ -18,5 +18,11 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+         // Sert à appeler les seeders pour administrateurs et profils
+         $this->call([
+            AdministrateurSeeder::class,
+            ProfileSeeder::class,
+        ]);
     }
 }
