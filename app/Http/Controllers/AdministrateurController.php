@@ -56,10 +56,12 @@ class AdministrateurController extends Controller
         ]);
     }
 
-    public function deconnexion(Request $request) // deconnexion de l'admin
+    public function deconnexion(Request $request)
     {
-        $request->user()->currentAccessToken()->delete(); //suppression du token créé à la connexion 
-
-        return response()->json(['message' => 'Déconnecté']);
+    if ($request->user() && $request->user()->currentAccessToken()) {
+        $request->user()->currentAccessToken()->delete();
     }
+    return response()->json(['message' => 'Déconnecté']);
+    }
+
 }

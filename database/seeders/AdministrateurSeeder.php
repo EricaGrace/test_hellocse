@@ -13,8 +13,8 @@ class AdministrateurSeeder extends Seeder
      */
     public function run(): void
     {
-        // Utiliser la factory pour créer 10 instances d'administrateurs
-        Administrateur::factory()->count(10)->create();
+        // Utiliser la factory pour créer 50 instances d'administrateurs
+        Administrateur::factory()->count(50)->create();
         
     }
 }

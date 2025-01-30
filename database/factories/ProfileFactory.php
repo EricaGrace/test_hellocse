@@ -24,7 +24,7 @@ class ProfileFactory extends Factory
         return [
             'nom' => $this->faker->lastName, // Génère un nom de famille aléatoire
             'prenom' => $this->faker->firstName, // Génère un prénom aléatoire
-            'image' => 'images/' . $this->faker->image('public/storage/images', 400, 300, null, false), // Génère un chemin d'image fictif
+            'image' => $this->faker->imageUrl(400, 300, 'people', true, 'Faker'), // Génère un chemin d'image fictif
             'statut' => $this->faker->randomElement(['inactif', 'en attente', 'actif']), // Génère un statut aléatoire parmi les valeurs spécifiées
         ];
     }
