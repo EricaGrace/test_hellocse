@@ -32,5 +32,4 @@ Route::middleware('auth:sanctum')->group(function () { ##routes protégées par 
 });
 
 Route::get('/profiles', [ProfileController::class, 'index']);
-/*Route::get('/admins', [AdministrateurController::class, 'index']);
-Route::middleware('auth:sanctum')->get('/admins', [AdministrateurController::class, 'index']);*/
+
